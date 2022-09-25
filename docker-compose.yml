@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  nginx:
+    image: nginx:1.23.1-alpine
+    volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d
+    - ./nginx/html:/usr/share/nginx/html
+    restart: always
+    ports:
+    - "8080:80"        
+    depends_on:
+    - ui5lib
+    - ui5rootshell
+    - ui5components
+    networks:
+    - ui5-demo-network
+
+  ui5lib:
+    container_name: ui5lib
+    build: ./ui5Lib
+    restart: always
+    # ports:
+    # - '8888:80'
+    networks:
+    - ui5-demo-network
+
+  ui5rootshell:
+    container_name: ui5rootshell
+    build: ./ui5RootShell
+    restart: always
+    # ports:
+    # - '8888:80'
+    networks:
+    - ui5-demo-network
+
+  ui5components: 
+    container_name: ui5components
+    build: ./ui5Components
+    restart: always
+    # ports:
+    # - '8888:80'
+    networks:
+    - ui5-demo-network
+
+networks:
+  ui5-demo-network:
+    driver: 'bridge'
